@@ -1,27 +1,20 @@
-# Back Gesture Android
+# Back Gesture Android — RootHide prototype
 
-Early experimental prototype of a two-sided Android-inspired edge gesture for jailbroken iOS.
+Target build: RootHide Theos, arm64e package, iOS deployment target 15.0.
 
-## Prototype behavior
-- Detects horizontal swipes beginning within a narrow left or right screen-edge zone.
-- Draws a black, droplet-like shape at the active edge and updates it as the finger moves.
-- On completion, attempts to pop a UIKit navigation controller, or dismiss a presented view controller.
-- On cancellation, fades the indicator away.
+## What this prototype attempts
+- Recognizes horizontal gestures starting at either screen edge in injected app processes.
+- Draws a black liquid/drop indicator that tracks the finger.
+- Attempts UIKit navigation pop or modal dismissal when the gesture passes a threshold.
 
-## Important limitations
-This is **not a finished or device-tested tweak**. It is a proof-of-concept and may not behave correctly in many apps:
-- It does not hook each app's private navigation implementation.
-- It does not implement a true interactive predictive-back transition for the previous app screen.
-- It may conflict with app-native edge gestures.
-- It has not been compiled or tested on an iPhone.
-- Compatibility with a jailbreak/bootstrap must be confirmed separately. This repository does not claim Dopamine/RootHide support on iOS 26.
+## RootHide packaging
+This project uses the official RootHide developer guidance:
+- Install the RootHide fork of Theos.
+- Build with `THEOS_PACKAGE_SCHEME=roothide`.
+- RootHide packages use a relocated jbroot layout; do not relabel a standard rootless package as RootHide.
 
-## Build
-Requires Theos, an iOS SDK and theos toolchain dependencies.
+## Important runtime limitation
+RootHide Bootstrap does not inject tweaks into every process automatically. Enable injection for target apps in Bootstrap's App List. This prototype is an app-process experiment; it does not promise a system-wide SpringBoard gesture. RootHide's documented default behavior does not inject into SpringBoard by default.
 
-For standard Dopamine rootless:
-```sh
-make clean package THEOS_PACKAGE_SCHEME=rootless
-```
-
-A RootHide package must be built with a RootHide-compatible packaging toolchain and its correct package scheme. Do not install the standard rootless artifact as a RootHide package.
+## Safety and status
+This is an experimental, untested prototype, not a stable release. It can conflict with app-native edge gestures and custom navigation stacks. Test only with a way to disable the tweak from Bootstrap/Sileo. iOS 26.0 runtime compatibility has not yet been verified on-device.
