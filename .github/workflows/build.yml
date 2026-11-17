@@ -1,0 +1,32 @@
+name: Build Back Gesture Android (Dopamine rootless)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  rootless:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Theos dependencies
+        run: |
+          brew install ldid make
+          git clone --recursive https://github.com/theos/theos.git "$GITHUB_WORKSPACE/theos"
+          echo "THEOS=$GITHUB_WORKSPACE/theos" >> "$GITHUB_ENV"
+          echo "$GITHUB_WORKSPACE/theos/bin" >> "$GITHUB_PATH"
+      - name: Build rootless package
+        run: |
+          export THEOS="$GITHUB_WORKSPACE/theos"
+          make clean package THEOS_PACKAGE_SCHEME=rootless
+      - name: Upload deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BackGestureAndroid-Dopamine-Rootless
+          path: packages/*.deb
+          if-no-files-found: error
+
+# RootHide is intentionally not built by this workflow: it requires a
+# RootHide-compatible Theos/toolchain and packaging configuration. A regular
+# Dopamine rootless .deb must not be mislabeled or installed as a RootHide build.
