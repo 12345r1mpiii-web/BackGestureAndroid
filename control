@@ -1,0 +1,9 @@
+Package: com.rimpi.backgestureandroid
+Name: Back Gesture Android
+Version: 0.1.0
+Architecture: iphoneos-arm64
+Description: Experimental two-sided Android-style back gesture with a black liquid edge indicator.
+Maintainer: 12345r1mpiii-web
+Author: 12345r1mpiii-web
+Section: Tweaks
+Depends: mobilesubstrate
